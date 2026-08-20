@@ -52,8 +52,8 @@ export const AppConfigSchema = z
 
 export const MemoryEntrySchema = z.object({
   id: z.string().min(1),
-  userText: z.string().min(1),
-  reply: z.string().min(1),
+  userText: z.string().min(1).max(1000),
+  reply: z.string().min(1).max(500),
   createdAt: z.string().datetime(),
   mentionedAt: z.string().datetime().nullable(),
 })
