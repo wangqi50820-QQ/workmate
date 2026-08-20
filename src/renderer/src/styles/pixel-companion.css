@@ -1,0 +1,67 @@
+.companion {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.companion-bubble {
+  position: relative;
+  max-width: 270px;
+  padding: 10px 14px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: white;
+  box-shadow: 3px 3px 0 var(--border);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.companion-bubble::after {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+  background: white;
+  content: '';
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.pixel-person {
+  position: relative;
+  width: 112px;
+  height: 148px;
+  image-rendering: pixelated;
+  filter: drop-shadow(7px 8px 0 rgba(46, 42, 37, 0.2));
+}
+
+.pixel-person span { position: absolute; display: block; }
+.pixel-person__face { left: 26px; top: 18px; width: 60px; height: 55px; border: 4px solid var(--border); background: #ffd0a6; }
+.pixel-person__hair { z-index: 2; left: 22px; top: 10px; width: 68px; height: 23px; border: 4px solid var(--border); background: #3b302c; box-shadow: 12px 10px 0 #3b302c; }
+.pixel-person__eye { z-index: 3; top: 46px; width: 7px; height: 8px; background: var(--border); }
+.pixel-person__eye--left { left: 42px; }
+.pixel-person__eye--right { right: 42px; }
+.pixel-person__mouth { z-index: 3; left: 50px; top: 62px; width: 14px; height: 4px; background: #8f493b; }
+.pixel-person__body { left: 27px; top: 74px; width: 58px; height: 50px; border: 4px solid var(--border); background: #2f5b79; }
+.pixel-person__badge { z-index: 3; left: 47px; top: 84px; width: 23px; height: 23px; color: #2e2a25; background: #ffd659; font-size: 13px; font-weight: 900; line-height: 23px; text-align: center; }
+.pixel-person__arm { top: 79px; width: 18px; height: 43px; border: 4px solid var(--border); background: #2f5b79; }
+.pixel-person__arm--left { left: 9px; transform: rotate(7deg); }
+.pixel-person__arm--right { right: 9px; transform: rotate(-7deg); }
+.pixel-person__leg { top: 120px; width: 23px; height: 27px; border: 4px solid var(--border); background: #493f57; }
+.pixel-person__leg--left { left: 29px; }
+.pixel-person__leg--right { right: 27px; }
+
+.companion--focus .pixel-person__eye { height: 3px; }
+.companion--listening .pixel-person { animation: companion-listen 1.2s steps(2, end) infinite; }
+.companion--celebrate .pixel-person { animation: companion-jump 0.7s steps(2, end) infinite; }
+.companion--sleepy .pixel-person { transform: rotate(2deg); }
+
+@keyframes companion-listen { 50% { transform: translateY(3px); } }
+@keyframes companion-jump { 50% { transform: translateY(-10px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .companion--listening .pixel-person,
+  .companion--celebrate .pixel-person { animation: none; }
+}
