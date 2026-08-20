@@ -75,6 +75,7 @@ export const MemoSchema = z.object({
 
 export const FocusStateSchema = z.object({
   phase: z.enum(['idle', 'focus', 'paused', 'break', 'complete']),
+  pausedFrom: z.enum(['focus', 'break']).nullable(),
   sessionSeconds: z.number().int().positive(),
   breakSeconds: z.number().int().positive(),
   remainingSeconds: z.number().int().nonnegative(),
@@ -138,6 +139,7 @@ export function defaultAppState(now: Date): AppState {
     memos: [],
     focus: {
       phase: 'idle',
+      pausedFrom: null,
       sessionSeconds: 25 * 60,
       breakSeconds: 5 * 60,
       remainingSeconds: 25 * 60,
