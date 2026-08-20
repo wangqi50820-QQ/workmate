@@ -1,0 +1,91 @@
+html:has(.floating-shell),
+body:has(.floating-shell),
+#root:has(.floating-shell) {
+  min-width: 0;
+  min-height: 100%;
+  overflow: hidden;
+  background: transparent;
+}
+
+.floating-shell {
+  position: relative;
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  align-items: end;
+  width: 280px;
+  height: 180px;
+  padding: 18px 12px 12px;
+  color: var(--ink);
+  background: transparent;
+}
+
+.floating-drag {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 26px;
+  color: transparent;
+  -webkit-app-region: drag;
+}
+
+.floating-companion,
+.floating-metric {
+  -webkit-app-region: no-drag;
+}
+
+.floating-companion {
+  align-self: end;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.floating-companion .companion-bubble {
+  display: none;
+}
+
+.floating-companion .pixel-person {
+  transform: scale(0.78);
+  transform-origin: bottom center;
+}
+
+.floating-metric {
+  display: grid;
+  gap: 4px;
+  align-self: end;
+  min-height: 72px;
+  margin-bottom: 14px;
+  padding: 11px 12px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  color: var(--ink);
+  background: rgba(255, 250, 240, 0.96);
+  box-shadow: 4px 4px 0 var(--border);
+  cursor: pointer;
+  text-align: left;
+}
+
+.floating-metric small {
+  color: #766a5f;
+  font-weight: 800;
+}
+
+.floating-metric strong {
+  font-size: 17px;
+  white-space: nowrap;
+}
+
+.floating-shell--loading {
+  place-items: center;
+  padding: 24px;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  background: var(--paper);
+  font-weight: 800;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-shell * {
+    scroll-behavior: auto;
+  }
+}

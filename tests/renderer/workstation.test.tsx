@@ -111,4 +111,26 @@ describe('companion workstation', () => {
       screen.getByRole('heading', { name: '工位设置' }),
     ).toBeInTheDocument()
   })
+
+  it('offers immediate demo triggers without changing the clock', async () => {
+    const { spies } = renderWorkstation()
+    fireEvent.click(screen.getByRole('button', { name: '打开设置' }))
+
+    const demos = [
+      ['演示实时工钱广播', 'broadcast'],
+      ['演示久坐提醒', 'sedentary'],
+      ['演示喝水提醒', 'water'],
+      ['演示下班提醒', 'off-work'],
+      ['演示发薪提醒', 'payday'],
+    ] as const
+    for (const [name] of demos) {
+      fireEvent.click(screen.getByRole('button', { name }))
+    }
+
+    await waitFor(() => {
+      expect(spies.triggerDemo.mock.calls.map(([kind]) => kind)).toEqual(
+        demos.map(([, kind]) => kind),
+      )
+    })
+  })
 })

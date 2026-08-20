@@ -2,6 +2,7 @@ import { vi } from 'vitest'
 import type {
   AppConfig,
   AppSnapshot,
+  DemoEventKind,
   GongyouApi,
 } from '../../src/shared/contracts'
 import { defaultAppState } from '../../src/shared/domain/config'
@@ -30,6 +31,7 @@ export const createSnapshot = (
 
 export function createTestApi(initial: AppSnapshot) {
   let current = structuredClone(initial)
+  let snapshotListener: ((snapshot: AppSnapshot) => void) | null = null
   const getSnapshot = vi.fn(async () => structuredClone(current))
   const updateConfig = vi.fn(async (patch: Partial<AppConfig>) => {
     current = {
@@ -51,9 +53,16 @@ export function createTestApi(initial: AppSnapshot) {
   const updateMemo = vi.fn(async () => structuredClone(current))
   const deleteMemo = vi.fn(async () => structuredClone(current))
   const acknowledge = vi.fn(async () => structuredClone(current))
-  const triggerDemo = vi.fn(async () => undefined)
+  const triggerDemo = vi.fn(async (_kind: DemoEventKind) => undefined)
   const hideAll = vi.fn(async () => undefined)
   const showWorkstation = vi.fn(async () => undefined)
+  const subscribe = vi.fn((listener: (snapshot: AppSnapshot) => void) => {
+    snapshotListener = listener
+    return () => {
+      if (snapshotListener === listener) snapshotListener = null
+    }
+  })
+  const subscribeReminder = vi.fn(() => () => undefined)
   const api: GongyouApi = {
     getSnapshot,
     updateConfig,
@@ -70,7 +79,8 @@ export function createTestApi(initial: AppSnapshot) {
     triggerDemo,
     hideAll,
     showWorkstation,
-    subscribe: () => () => undefined,
+    subscribe,
+    subscribeReminder,
   }
 
   return {
@@ -89,6 +99,11 @@ export function createTestApi(initial: AppSnapshot) {
       deleteMemo,
       acknowledge,
       triggerDemo,
+      showWorkstation,
+    },
+    publish: (snapshot: AppSnapshot) => {
+      current = structuredClone(snapshot)
+      snapshotListener?.(structuredClone(snapshot))
     },
   }
 }

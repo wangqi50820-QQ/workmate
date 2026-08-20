@@ -4,7 +4,11 @@ import {
   type Display,
   type Rectangle,
 } from 'electron'
-import { IPC_CHANNELS, type AppSnapshot } from '../shared/contracts'
+import {
+  IPC_CHANNELS,
+  type AppSnapshot,
+  type BroadcastPayload,
+} from '../shared/contracts'
 import type { ReminderEvent } from '../shared/domain/reminders'
 import type { JsonStore } from './storage'
 
@@ -224,7 +228,11 @@ export function createWindowController(
       if (!window || window.isDestroyed()) {
         return
       }
-      window.webContents.send('gongyou:reminder', event)
+      const payload: BroadcastPayload = {
+        event,
+        shownAt: new Date().toISOString(),
+      }
+      window.webContents.send(IPC_CHANNELS.reminder, payload)
       window.showInactive()
       if (broadcastTimer) {
         clearTimeout(broadcastTimer)

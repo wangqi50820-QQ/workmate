@@ -1,6 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { WorkstationWindow } from './windows/WorkstationWindow'
+import { FloatingWindow } from './windows/FloatingWindow'
+import { BroadcastWindow } from './windows/BroadcastWindow'
 import './styles/tokens.css'
 
 const windowName = new URLSearchParams(window.location.search).get('window')
@@ -12,8 +14,10 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    {windowName === 'workstation' || windowName === null ? (
-      <WorkstationWindow />
+    {windowName === 'floating' ? (
+      <FloatingWindow />
+    ) : windowName === 'broadcast' ? (
+      <BroadcastWindow />
     ) : (
       <WorkstationWindow />
     )}

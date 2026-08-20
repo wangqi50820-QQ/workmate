@@ -11,6 +11,7 @@ import {
 } from '../shared/contracts'
 import type { FocusEvent } from '../shared/domain/focus'
 import type { MemoInput, MemoPatch } from '../shared/domain/tasks'
+import type { ReminderEvent } from '../shared/domain/reminders'
 
 type IpcListener = (...args: unknown[]) => unknown
 
@@ -35,6 +36,22 @@ export interface IpcServices {
   triggerDemo(kind: DemoEventKind): Promise<void>
   hideAll(): Promise<void>
   showWorkstation(): Promise<void>
+}
+
+export interface ReminderDeliveryTargets {
+  showBroadcast(event: ReminderEvent): void
+  showNotification(event: ReminderEvent): void
+}
+
+export function routeReminderDelivery(
+  event: ReminderEvent,
+  meetingMode: boolean,
+  targets: ReminderDeliveryTargets,
+): void {
+  if (!meetingMode) {
+    targets.showBroadcast(event)
+  }
+  targets.showNotification(event)
 }
 
 export function registerIpcHandlers(

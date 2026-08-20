@@ -6,7 +6,7 @@ export type CompanionMood =
   | 'celebrate'
 
 const moodNames: Record<CompanionMood, string> = {
-  idle: '待机',
+  idle: '陪着你',
   listening: '认真听',
   focus: '陪你专注',
   sleepy: '有点困',

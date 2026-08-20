@@ -305,6 +305,11 @@
 .memory-list p { margin: 6px 0; font-size: 13px; }
 .settings-panel form > p { font-size: 12px; line-height: 1.6; }
 .saved-note { color: #2d6842; font-weight: 800; }
+.demo-controls { display: grid; gap: 12px; margin-top: 28px; padding-top: 22px; border-top: 2px dashed #9d8f80; }
+.demo-controls h3 { margin: 0 0 5px; font-size: 20px; }
+.demo-controls p { font-size: 12px; line-height: 1.5; }
+.demo-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.demo-grid button { min-height: 42px; padding: 8px; }
 
 @media (max-width: 850px) {
   .desk-scene { grid-template-columns: 1fr; }

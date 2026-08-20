@@ -3,6 +3,7 @@ import type {
   AiSessionConfig,
   AppConfig,
   AppSnapshot,
+  BroadcastPayload,
   DemoEventKind,
   EmpathyResult,
   GongyouApi,
@@ -45,6 +46,17 @@ const api: GongyouApi = {
 
     ipcRenderer.on(IPC_CHANNELS.snapshot, handler)
     return () => ipcRenderer.removeListener(IPC_CHANNELS.snapshot, handler)
+  },
+  subscribeReminder: (listener: (payload: BroadcastPayload) => void) => {
+    const handler = (
+      _event: Electron.IpcRendererEvent,
+      payload: BroadcastPayload,
+    ) => {
+      listener(payload)
+    }
+
+    ipcRenderer.on(IPC_CHANNELS.reminder, handler)
+    return () => ipcRenderer.removeListener(IPC_CHANNELS.reminder, handler)
   },
 }
 

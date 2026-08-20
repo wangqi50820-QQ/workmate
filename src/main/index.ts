@@ -25,6 +25,7 @@ import { createCheckIn, createMemo, updateMemo } from '../shared/domain/tasks'
 import { createAiClient } from './ai-client'
 import {
   registerIpcHandlers,
+  routeReminderDelivery,
   type IpcMainLike,
   type IpcServices,
 } from './ipc'
@@ -73,6 +74,17 @@ if (!hasSingleInstanceLock) {
       }
     }
 
+    const deliverReminder = (event: ReminderEvent): void => {
+      routeReminderDelivery(
+        event,
+        latestSnapshot?.config.meetingMode ?? false,
+        {
+          showBroadcast: (reminder) => windows?.showBroadcast(reminder),
+          showNotification: showSystemNotification,
+        },
+      )
+    }
+
     scheduler = createScheduler({
       store,
       publish: (snapshot) => {
@@ -80,10 +92,7 @@ if (!hasSingleInstanceLock) {
         windows?.publish(snapshot)
       },
       routeReminder: (event) => {
-        if (!latestSnapshot?.config.meetingMode) {
-          windows?.showBroadcast(event)
-        }
-        showSystemNotification(event)
+        deliverReminder(event)
       },
     })
 
@@ -246,7 +255,7 @@ if (!hasSingleInstanceLock) {
           payday: ['工资到账日', '辛苦挣来的钱来报到了。'],
         }
         const [title, message] = copy[kind]
-        windows?.showBroadcast({
+        deliverReminder({
           key: `demo:${kind}:${Date.now()}`,
           kind: kind === 'broadcast' ? 'salary' : kind,
           title,

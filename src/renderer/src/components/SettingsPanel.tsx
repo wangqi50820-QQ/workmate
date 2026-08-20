@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useAppState } from '../app-state'
+import { DemoControls } from './DemoControls'
 
 export function SettingsPanel({ onClose }: { onClose(): void }) {
   const { api } = useAppState()
@@ -47,6 +48,7 @@ export function SettingsPanel({ onClose }: { onClose(): void }) {
           <button disabled={!baseUrl.trim() || !model.trim() || !apiKey.trim()}>应用 AI 设置</button>
           {saved ? <small className="saved-note">已应用，密钥输入已清空。</small> : null}
         </form>
+        <DemoControls />
       </section>
     </div>
   )

@@ -39,6 +39,11 @@ export interface EmpathyResult {
   memoryId?: string
 }
 
+export interface BroadcastPayload {
+  event: ReminderEvent
+  shownAt: string
+}
+
 export type DemoEventKind =
   | 'broadcast'
   | 'sedentary'
@@ -63,6 +68,7 @@ export const IPC_CHANNELS = {
   hideAll: 'gongyou:hide-all',
   showWorkstation: 'gongyou:show-workstation',
   snapshot: 'gongyou:snapshot',
+  reminder: 'gongyou:reminder',
 } as const
 
 export const GONGYOU_INVOKE_CHANNELS = [
@@ -100,6 +106,7 @@ export interface GongyouApi {
   hideAll(): Promise<void>
   showWorkstation(): Promise<void>
   subscribe(listener: (snapshot: AppSnapshot) => void): () => void
+  subscribeReminder(listener: (payload: BroadcastPayload) => void): () => void
 }
 
 declare global {
