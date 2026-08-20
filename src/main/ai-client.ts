@@ -1,18 +1,12 @@
-import type { MemoryEntry } from '../shared/contracts'
+import type {
+  EmpathyRequest,
+  EmpathyResult,
+} from '../shared/contracts'
+
+export type { EmpathyRequest, EmpathyResult } from '../shared/contracts'
 
 const DEFAULT_ENDPOINT = 'https://api.openai.com/v1/chat/completions'
 const DEFAULT_TIMEOUT_MS = 8000
-
-export interface EmpathyRequest {
-  statement: string
-  memory?: MemoryEntry
-}
-
-export interface EmpathyResult {
-  text: string
-  source: 'remote' | 'fallback'
-  memoryId?: string
-}
 
 export interface AiClientOptions {
   apiKey?: string

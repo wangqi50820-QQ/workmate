@@ -1,23 +1,50 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import type {
+  AiSessionConfig,
   AppConfig,
   AppSnapshot,
+  DemoEventKind,
+  EmpathyResult,
   GongyouApi,
 } from '../shared/contracts'
+import { IPC_CHANNELS } from '../shared/contracts'
+import type { FocusEvent } from '../shared/domain/focus'
+import type { MemoInput, MemoPatch } from '../shared/domain/tasks'
 
 const api: GongyouApi = {
-  getSnapshot: () => ipcRenderer.invoke('gongyou:get-snapshot'),
+  getSnapshot: () => ipcRenderer.invoke(IPC_CHANNELS.getSnapshot),
   updateConfig: (patch: Partial<AppConfig>) =>
-    ipcRenderer.invoke('gongyou:update-config', patch),
-  hideAll: () => ipcRenderer.invoke('gongyou:hide-all'),
-  showWorkstation: () => ipcRenderer.invoke('gongyou:show-workstation'),
+    ipcRenderer.invoke(IPC_CHANNELS.updateConfig, patch),
+  setAiSession: (config: AiSessionConfig | null) =>
+    ipcRenderer.invoke(IPC_CHANNELS.setAiSession, config),
+  submitTreeHole: (text: string): Promise<EmpathyResult> =>
+    ipcRenderer.invoke(IPC_CHANNELS.submitTreeHole, text),
+  deleteMemory: (id: string) =>
+    ipcRenderer.invoke(IPC_CHANNELS.deleteMemory, id),
+  clearMemories: () => ipcRenderer.invoke(IPC_CHANNELS.clearMemories),
+  dispatchFocus: (event: FocusEvent) =>
+    ipcRenderer.invoke(IPC_CHANNELS.dispatchFocus, event),
+  createCheckIn: (text: string) =>
+    ipcRenderer.invoke(IPC_CHANNELS.createCheckIn, text),
+  createMemo: (input: MemoInput) =>
+    ipcRenderer.invoke(IPC_CHANNELS.createMemo, input),
+  updateMemo: (id: string, patch: MemoPatch) =>
+    ipcRenderer.invoke(IPC_CHANNELS.updateMemo, id, patch),
+  deleteMemo: (id: string) =>
+    ipcRenderer.invoke(IPC_CHANNELS.deleteMemo, id),
+  acknowledge: (key: string) =>
+    ipcRenderer.invoke(IPC_CHANNELS.acknowledge, key),
+  triggerDemo: (kind: DemoEventKind) =>
+    ipcRenderer.invoke(IPC_CHANNELS.triggerDemo, kind),
+  hideAll: () => ipcRenderer.invoke(IPC_CHANNELS.hideAll),
+  showWorkstation: () => ipcRenderer.invoke(IPC_CHANNELS.showWorkstation),
   subscribe: (listener: (snapshot: AppSnapshot) => void) => {
     const handler = (_event: Electron.IpcRendererEvent, snapshot: AppSnapshot) => {
       listener(snapshot)
     }
 
-    ipcRenderer.on('gongyou:snapshot', handler)
-    return () => ipcRenderer.removeListener('gongyou:snapshot', handler)
+    ipcRenderer.on(IPC_CHANNELS.snapshot, handler)
+    return () => ipcRenderer.removeListener(IPC_CHANNELS.snapshot, handler)
   },
 }
 

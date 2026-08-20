@@ -89,6 +89,13 @@ export const ReminderAcknowledgementsSchema = z.object({
   emittedKeys: z.array(z.string()),
 })
 
+const WindowBoundsSchema = z.object({
+  x: z.number().finite(),
+  y: z.number().finite(),
+  width: z.number().finite().positive(),
+  height: z.number().finite().positive(),
+})
+
 export const AppStateSchema = z.object({
   schemaVersion: z.literal(1),
   config: AppConfigSchema,
@@ -97,6 +104,10 @@ export const AppStateSchema = z.object({
   memos: z.array(MemoSchema),
   focus: FocusStateSchema,
   acknowledged: ReminderAcknowledgementsSchema,
+  windowBounds: z.object({
+    workstation: WindowBoundsSchema.nullable(),
+    floating: WindowBoundsSchema.nullable(),
+  }),
 })
 
 export type AppConfig = z.infer<typeof AppConfigSchema>
@@ -150,6 +161,10 @@ export function defaultAppState(now: Date): AppState {
       sedentaryStartedAt: startedAt,
       waterStartedAt: startedAt,
       emittedKeys: [],
+    },
+    windowBounds: {
+      workstation: null,
+      floating: null,
     },
   }
 }
