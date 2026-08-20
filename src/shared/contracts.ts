@@ -1,13 +1,16 @@
-export interface AppConfig {
-  userName: string
-  companionName: string
-  payday: number
-  monthlySalary: number
-}
+import type { AppConfig, AppState } from './domain/config'
 
-export interface AppSnapshot {
-  config: AppConfig
-}
+export type {
+  AppConfig,
+  AppState,
+  CheckIn,
+  FocusState,
+  Memo,
+  MemoryEntry,
+  ReminderAcknowledgements,
+} from './domain/config'
+
+export type AppSnapshot = AppState
 
 export interface GongyouApi {
   getSnapshot(): Promise<AppSnapshot>
